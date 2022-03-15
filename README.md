@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# Subscriptions Customer Portal
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+This open-source project serves as a starting point for developers creating a customer portal from scratch that is integrated with Bold Subscriptions.
 
-In the project directory, you can run:
+## Installation
 
-### `npm start`
+Use the following steps to set up and configure this project:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Fork the repo into your workspace.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. Clone your copy of the repo using the following command:
 
-### `npm test`
+    ```
+    $ git clone https://github.com/path/to/your/forked/version
+    ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Copy the `.env.example` file using the following command and update any values as necessary:
 
-### `npm run build`
+    ```
+    $ cp .env.example .env
+    ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. Ensure you are on the correct Node version using the following commands:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    ```
+    $ nvm install 16
+    $ nvm use 16
+    ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. Install, build, and run yarn using the following commands:
 
-### `npm run eject`
+    ```
+    $ yarn
+    $ yarn build
+    $ yarn start
+    ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+6. Navigate to the window with your local preview: 
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    http://localhost:3000
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Configuration on a Shopify theme
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. In your shopify theme, add the following line to the bottom of your `theme.liquid` file before the closing `</body></html>` tags:
 
-## Learn More
+    ```html 
+    <script src="http://localhost:3000/static/js/bundle.js" type="text/javascript"></script>
+    ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2.  Insert the following `<div>` into the subscription management page:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    1. Navigate to the page for managing subscriptions.
 
-### Code Splitting
+    2. Within the editor menu, click the **Insert HTML** button and insert: 
+    
+    ```html
+    <div id="subscriptions-customer-portal-root"></div>
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Documentation
 
-### Analyzing the Bundle Size
+For more information, refer to the following resources:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* [Build a Customer Portal](https://developer.boldcommerce.com/default/guides/subscriptions-v2/customer-portals)
+* [Bold Subscriptions API Specification](https://developer.boldcommerce.com/default/api/subscriptions)

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {Button} from "@boldcommerce/stacks-ui";
 
-const StyledNoSubscriptions = styled.div`
+const StyledLoginPrompt = styled.div`
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding-top: 40px;
@@ -27,24 +27,23 @@ const StyledText = styled.div`
     line-height: 20px;
 `;
 
-const NoSubscriptions = () => {
+const LoginPrompt = () => {
     return (
-        <StyledNoSubscriptions>
+        <StyledLoginPrompt>
             <StyledTitle>
-                You don’t have an active subscription
+                You are not logged in
             </StyledTitle>
 
             <StyledText>
-                Continue shopping to find and subscribe to your favorite products
+                Please log in or create an account to see your active subscriptions
             </StyledText>
-
-            <a href="/">
+            <a href="/account/login">
                 <Button className="custom-button" primary>
-                    Continue shopping
+                    Login
                 </Button>
             </a>
-        </StyledNoSubscriptions>
+        </StyledLoginPrompt>
     );
 };
 
-export default NoSubscriptions;
+export default LoginPrompt;

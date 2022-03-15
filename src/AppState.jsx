@@ -1,5 +1,7 @@
-import { createContext, useEffect, useState } from "react";
-import { ChildrenType, SubscriptionStatus } from "./const";
+import { React, createContext, useEffect, useState } from "react";
+import { SubscriptionStatus } from "./const";
+import { ChildrenType } from "./customPropTypes";
+import useGetCustomer from './hooks/queries/subscriptions/useGetCustomer';
 import useGetSubscriptions from "./hooks/queries/subscriptions/useGetSubscriptions";
 import useGetIntervals from "./hooks/queries/subscriptions/useGetIntervals";
 import useGetPaymentMethod from "./hooks/queries/subscriptions/useGetPaymentMethod";
@@ -14,288 +16,298 @@ import useUpdatePaymentMethod from "./hooks/queries/subscriptions/useUpdatePayme
 export const AppStateContext = createContext(null);
 
 const AppStateProviderPropTypes = {
-  children: ChildrenType.isRequired,
+    children: ChildrenType.isRequired,
 };
 
 export const AppStateProvider = (props) => {
-  const { children } = props;
+    const { children } = props;
 
-  // states
-  const [subscriptionID, setSubscriptionID] = useState(null);
+    // states
+    const [subscriptionID, setSubscriptionID] = useState(null);
+    const [customerID, setCustomerID] = useState(null);
 
-  const [addressFormErrors, setAddressFormErrors] = useState(null);
+    const [addressFormErrors, setAddressFormErrors] = useState(null);
 
-  const [showShippingAddressForm, setShowShippingAddressForm] = useState(false);
-  const [showBillingAddressForm, setShowBillingAddressForm] = useState(false);
-  const [showIntervalForm, setShowIntervalForm] = useState(false);
-  const [showPaymentMethodForm, setShowPaymentMethodForm] = useState(false);
+    const [showShippingAddressForm, setShowShippingAddressForm] = useState(false);
+    const [showPaymentBillingAddressForm, setShowPaymentBillingAddressForm] = useState(false);
+    const [showIntervalForm, setShowIntervalForm] = useState(false);
+    const [showPaymentMethodForm, setShowPaymentMethodForm] = useState(false);
 
-  const [showModalPause, setShowModalPause] = useState(false);
-  const [showModalCancel, setShowModalCancel] = useState(false);
+    const [showModalPause, setShowModalPause] = useState(false);
+    const [showModalCancel, setShowModalCancel] = useState(false);
 
-  // handlers for queries and mutations
-  const handleGetSubscriptionsSuccess = () => {
-    setShowShippingAddressForm(false);
-    setShowBillingAddressForm(false);
-    setShowIntervalForm(false);
-    setShowPaymentMethodForm(false);
+    // handlers for queries and mutations
+    const handleGetSubscriptionsSuccess = () => {
+        setShowShippingAddressForm(false);
+        setShowPaymentBillingAddressForm(false);
+        setShowIntervalForm(false);
+        setShowPaymentMethodForm(false);
 
-    setShowModalPause(false);
-    setShowModalCancel(false);
-  };
+        setShowModalPause(false);
+        setShowModalCancel(false);
+    };
 
-  const handlePauseSubscriptionSuccess = () => {
-    refetchSubscriptions();
-  };
+    const handlePauseSubscriptionSuccess = () => {
+        refetchSubscriptions();
+    };
 
-  const handleCancelSubscriptionSuccess = () => {
-    refetchSubscriptions();
-  };
+    const handleCancelSubscriptionSuccess = () => {
+        refetchSubscriptions();
+    };
 
-  const handleActivateSubscriptionSuccess = () => {
-    Notify.success("Subscription reactivated successfully");
-    refetchSubscriptions();
-  };
+    const handleActivateSubscriptionSuccess = () => {
+        Notify.success("Subscription reactivated successfully");
+        refetchSubscriptions();
+    };
 
-  const handleUpdateAddressSuccess = () => {
-    Notify.success("Address changed successfully");
-    refetchSubscriptions();
-  };
+    const handleUpdateAddressSuccess = () => {
+        Notify.success("Address changed successfully");
+        refetchSubscriptions();
+    };
 
-  const handleUpdatePaymentMethod = () => {
-    Notify.success("The email has been sent successfully");
-    setShowPaymentMethodForm(false);
-  };
+    const handleUpdatePaymentMethod = () => {
+        Notify.success("The email has been sent successfully");
+        setShowPaymentMethodForm(false);
+    };
 
-  const handleUpdateAddressError = (error) => {
-    const { message, fieldErrors } = error;
-    setAddressFormErrors(fieldErrors);
-    Notify.alert(message);
-  };
+    const handleUpdateAddressError = (error) => {
+        const { message, fieldErrors } = error;
+        setAddressFormErrors(fieldErrors);
+        Notify.alert(message);
+    };
 
-  const handleUpdateIntervalSuccess = () => {
-    Notify.success("Frequency changed successfully");
-    refetchSubscriptions();
-  };
+    const handleUpdateIntervalSuccess = () => {
+        Notify.success("Frequency changed successfully");
+        refetchSubscriptions();
+    };
 
-  // queries and mutations
-  const { subscriptions, areSubscriptionsLoading, refetchSubscriptions } =
-    useGetSubscriptions({
-      onSuccess: handleGetSubscriptionsSuccess,
+    // queries and mutations
+    const { subscriptions, areSubscriptionsLoading, refetchSubscriptions } =
+        useGetSubscriptions({
+            onSuccess: handleGetSubscriptionsSuccess,
+        });
+
+    const { customer, isCustomerLoading } = useGetCustomer();
+
+    const { intervals, areIntervalsLoading } = useGetIntervals({
+        subscriptionID,
     });
 
-  const { intervals, areIntervalsLoading } = useGetIntervals({
-    subscriptionID,
-  });
-
-  const { paymentMethod, isPaymentMethodLoading } = useGetPaymentMethod({
-    subscriptionID,
-  });
-
-  const { isSubscriptionPausing, pauseSubscription } = usePauseSubscription({
-    onSuccess: handlePauseSubscriptionSuccess,
-  });
-
-  const { isSubscriptionCancelling, cancelSubscription } =
-    useCancelSubscription({
-      onSuccess: handleCancelSubscriptionSuccess,
+    const { paymentMethod, isPaymentMethodLoading } = useGetPaymentMethod({
+        subscriptionID,
     });
 
-  const { isSubscriptionActivating, activateSubscription } =
-    useActivateSubscription({
-      onSuccess: handleActivateSubscriptionSuccess,
+    const { isSubscriptionPausing, pauseSubscription } = usePauseSubscription({
+        onSuccess: handlePauseSubscriptionSuccess,
     });
 
-  const { isAddressUpdating, updateAddress } = useUpdateAddress({
-    onSuccess: handleUpdateAddressSuccess,
-    onError: handleUpdateAddressError,
-  });
+    const { isSubscriptionCancelling, cancelSubscription } =
+        useCancelSubscription({
+            onSuccess: handleCancelSubscriptionSuccess,
+        });
 
-  const { isIntervalUpdating, updateInterval } = useUpdateInterval({
-    onSuccess: handleUpdateIntervalSuccess,
-  });
+    const { isSubscriptionActivating, activateSubscription } =
+        useActivateSubscription({
+            onSuccess: handleActivateSubscriptionSuccess,
+        });
 
-  const { updatePaymentMethod, isPaymentMethodUpdating } =
-    useUpdatePaymentMethod({
-      subscriptionID,
-      onSuccess: handleUpdatePaymentMethod,
+    const { isAddressUpdating, updateAddress } = useUpdateAddress({
+        onSuccess: handleUpdateAddressSuccess,
+        onError: handleUpdateAddressError,
     });
 
-  useEffect(() => {
-    if (subscriptions?.length && !subscriptionID) {
-      const { id } = subscriptions[0];
-      setSubscriptionID(id);
-    }
-  }, [subscriptions, subscriptionID]);
+    const { isIntervalUpdating, updateInterval } = useUpdateInterval({
+        onSuccess: handleUpdateIntervalSuccess,
+    });
 
-  // derived data
-  const isAppLoadingInitial = areSubscriptionsLoading;
+    const { updatePaymentMethod, isPaymentMethodUpdating } =
+        useUpdatePaymentMethod({
+            subscriptionID,
+            onSuccess: handleUpdatePaymentMethod,
+        });
 
-  const isAppLoading =
-    areSubscriptionsLoading ||
-    isSubscriptionPausing ||
-    isSubscriptionCancelling ||
-    isSubscriptionActivating ||
-    isAddressUpdating ||
-    isIntervalUpdating ||
-    isPaymentMethodLoading ||
-    isPaymentMethodUpdating;
+    useEffect(() => {
+        if (subscriptions?.length && !subscriptionID) {
+            const { id } = subscriptions[0];
+            setSubscriptionID(id);
+        }
+    }, [subscriptions, subscriptionID]);
 
-  const subscription = subscriptions?.find((subscription) => {
-    const { id } = subscription;
-    return id === subscriptionID;
-  });
+    useEffect(() => {
+        if (customer && customer.id) {
+            const { id } = customer;
+            setCustomerID(id);
+        } else {
+            setCustomerID(null);
+        }
+    }, [customer]);
 
-  const subscriptionStatus = subscription?.status;
-  const isSubscriptionActive = subscriptionStatus === SubscriptionStatus.ACTIVE;
-  const isSubscriptionInactive =
-    subscriptionStatus === SubscriptionStatus.INACTIVE;
-  const isSubscriptionPaused = subscriptionStatus === SubscriptionStatus.PAUSED;
+    // derived data
+    const isAppLoadingInitial = isCustomerLoading || areSubscriptionsLoading;
 
-  // app state and actions
-  const appState = {
-    subscriptions,
-    subscription,
-    subscriptionID,
+    const isAppLoading =
+        isCustomerLoading ||
+        areSubscriptionsLoading ||
+        isSubscriptionPausing ||
+        isSubscriptionCancelling ||
+        isSubscriptionActivating ||
+        isAddressUpdating ||
+        isIntervalUpdating ||
+        isPaymentMethodLoading ||
+        isPaymentMethodUpdating;
 
-    intervals,
-    paymentMethod,
+    const subscription = subscriptions?.find((subscription) => {
+        const { id } = subscription;
+        return id === subscriptionID;
+    });
 
-    addressFormErrors,
+    const subscriptionStatus = subscription?.status;
+    const isSubscriptionActive = subscriptionStatus === SubscriptionStatus.ACTIVE;
+    const isSubscriptionInactive =
+        subscriptionStatus === SubscriptionStatus.INACTIVE;
+    const isSubscriptionPaused = subscriptionStatus === SubscriptionStatus.PAUSED;
 
-    isAppLoadingInitial,
-    isAppLoading,
-    areIntervalsLoading,
-    isPaymentMethodLoading,
+    // app state and actions
+    const appState = {
+        subscriptions,
+        subscription,
+        subscriptionID,
+        customerID,
 
-    isSubscriptionActive,
-    isSubscriptionInactive,
-    isSubscriptionPaused,
+        intervals,
+        paymentMethod,
 
-    showShippingAddressForm,
-    showBillingAddressForm,
-    showIntervalForm,
-    showPaymentMethodForm,
-    showModalPause,
-    showModalCancel,
-  };
+        addressFormErrors,
 
-  const appActions = {
-    // active subscription
-    viewSubscription: (subscriptionID) => {
-      setSubscriptionID(subscriptionID);
+        isAppLoadingInitial,
+        isAppLoading,
+        areIntervalsLoading,
+        isPaymentMethodLoading,
 
-      setAddressFormErrors(null);
+        isSubscriptionActive,
+        isSubscriptionInactive,
+        isSubscriptionPaused,
 
-      setShowShippingAddressForm(false);
-      setShowBillingAddressForm(false);
-      setShowIntervalForm(false);
-      setShowPaymentMethodForm(false);
-    },
+        showShippingAddressForm,
+        showPaymentBillingAddressForm,
+        showIntervalForm,
+        showPaymentMethodForm,
+        showModalPause,
+        showModalCancel,
+    };
 
-    // pause
-    startPauseSubscription: () => {
-      setShowModalPause(true);
-    },
-    stopPauseSubscription: () => {
-      setShowModalPause(false);
-    },
-    finishPauseSubscription: () => {
-      pauseSubscription({ subscriptionID });
-    },
+    const appActions = {
+        // active subscription
+        viewSubscription: (subscriptionID) => {
+            setSubscriptionID(subscriptionID);
 
-    // cancel
-    startCancelSubscription: () => {
-      setShowModalCancel(true);
-    },
-    stopCancelSubscription: () => {
-      setShowModalCancel(false);
-    },
-    finishCancelSubscription: () => {
-      cancelSubscription({ subscriptionID });
-    },
+            setAddressFormErrors(null);
 
-    // activate
-    activateSubscription: () => {
-      activateSubscription({ subscriptionID });
-    },
+            setShowShippingAddressForm(false);
+            setShowPaymentBillingAddressForm(false);
+            setShowIntervalForm(false);
+            setShowPaymentMethodForm(false);
+        },
 
-    // shipping address
-    startUpdateAddressShipping: () => {
-      setAddressFormErrors(null);
+        // pause
+        startPauseSubscription: () => {
+            setShowModalPause(true);
+        },
+        stopPauseSubscription: () => {
+            setShowModalPause(false);
+        },
+        finishPauseSubscription: () => {
+            pauseSubscription({ subscriptionID });
+        },
 
-      setShowShippingAddressForm(true);
-      setShowBillingAddressForm(false);
-      setShowIntervalForm(false);
-      setShowPaymentMethodForm(false);
-    },
-    stopUpdateAddressShipping: () => {
-      setAddressFormErrors(null);
+        // cancel
+        startCancelSubscription: () => {
+            setShowModalCancel(true);
+        },
+        stopCancelSubscription: () => {
+            setShowModalCancel(false);
+        },
+        finishCancelSubscription: () => {
+            cancelSubscription({ subscriptionID });
+        },
 
-      setShowShippingAddressForm(false);
-    },
-    finishUpdateAddressShipping: (address) => {
-      updateAddress({ address });
-    },
+        // activate
+        activateSubscription: () => {
+            activateSubscription({ subscriptionID });
+        },
 
-    // billing address
-    startUpdateAddressBilling: () => {
-      setAddressFormErrors(null);
+        // shipping address
+        startUpdateAddressShipping: () => {
+            setAddressFormErrors(null);
 
-      setShowShippingAddressForm(false);
-      setShowBillingAddressForm(true);
-      setShowIntervalForm(false);
-      setShowPaymentMethodForm(false);
-    },
-    stopUpdateAddressBilling: () => {
-      setAddressFormErrors(null);
+            setShowShippingAddressForm(true);
+            setShowPaymentBillingAddressForm(false);
+            setShowIntervalForm(false);
+            setShowPaymentMethodForm(false);
+        },
+        stopUpdateAddressShipping: () => {
+            setAddressFormErrors(null);
+            setShowShippingAddressForm(false);
+        },
+        finishUpdateAddressShipping: (address) => {
+            updateAddress({ address });
+        },
 
-      setShowBillingAddressForm(false);
-    },
-    finishUpdateAddressBilling: (address) => {
-      updateAddress({ address });
-    },
+        // billing address
+        startUpdateAddressBilling: () => {
+            setAddressFormErrors(null);
 
-    // interval
-    startUpdateInterval: () => {
-      setAddressFormErrors(null);
+            setShowShippingAddressForm(false);
+            setShowPaymentBillingAddressForm(true);
+            setShowIntervalForm(false);
+            setShowPaymentMethodForm(false);
+        },
+        stopUpdateAddressBilling: () => {
+            setAddressFormErrors(null);
 
-      setShowShippingAddressForm(false);
-      setShowBillingAddressForm(false);
-      setShowIntervalForm(true);
-      setShowPaymentMethodForm(false);
-    },
-    stopUpdateInterval: () => {
-      setShowIntervalForm(false);
-    },
-    finishUpdateInterval: (intervalID) => {
-      updateInterval({ subscriptionID, intervalID });
-    },
+            setShowPaymentBillingAddressForm(false);
+        },
 
-    // payment
-    startUpdatePaymentMethod: () => {
-      setAddressFormErrors(null);
+        // interval
+        startUpdateInterval: () => {
+            setAddressFormErrors(null);
 
-      setShowShippingAddressForm(false);
-      setShowBillingAddressForm(false);
-      setShowIntervalForm(false);
-      setShowPaymentMethodForm(true);
-    },
-    stopUpdatePaymentMethod: () => {
-      setShowPaymentMethodForm(false);
-    },
-    finishUpdatePaymentMethod: (updateMethod) => {
-      updatePaymentMethod({ subscriptionID, updateMethod });
-    },
-  };
+            setShowShippingAddressForm(false);
+            setShowPaymentBillingAddressForm(false);
+            setShowIntervalForm(true);
+            setShowPaymentMethodForm(false);
+        },
+        stopUpdateInterval: () => {
+            setShowIntervalForm(false);
+        },
+        finishUpdateInterval: (intervalID) => {
+            updateInterval({ subscriptionID, intervalID });
+        },
 
-  const value = { appState, appActions };
+        // payment
+        startUpdatePaymentMethod: () => {
+            setAddressFormErrors(null);
 
-  return (
-    <AppStateContext.Provider value={value}>
-      {children}
-    </AppStateContext.Provider>
-  );
+            setShowShippingAddressForm(false);
+            setShowPaymentBillingAddressForm(false);
+            setShowIntervalForm(false);
+            setShowPaymentMethodForm(true);
+        },
+        stopUpdatePaymentMethod: () => {
+            setShowPaymentMethodForm(false);
+        },
+        finishUpdatePaymentMethod: (updateMethod) => {
+            updatePaymentMethod({ subscriptionID, updateMethod });
+        },
+    };
+
+    const value = { appState, appActions };
+
+    return (
+        <AppStateContext.Provider value={value}>
+            {children}
+        </AppStateContext.Provider>
+    );
 };
 
 AppStateProvider.propTypes = AppStateProviderPropTypes;

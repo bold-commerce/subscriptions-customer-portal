@@ -1,40 +1,56 @@
 {
-  "name": "boldcommerce-bcp",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@boldcommerce/stacks-ui": "^1.2.1",
-    "axios": "^0.25.0",
-    "classnames": "^2.3.1",
-    "country-state-city": "^3.0.1",
-    "js-cookie": "^3.0.1",
-    "prop-types": "^15.7.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-query": "^3.34.12",
-    "react-scripts": "5.0.0",
-    "react-toastify": "^8.1.1",
-    "styled-components": "^5.3.3"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "sprite-generate": "svg-sprite-generate -d ./src/assets/icons -o ./public/sprite.svg"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "eslint": "^8.5.0",
-    "eslint-plugin-react": "^7.27.1"
-  }
+    "name": "boldcommerce-bcp",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@boldcommerce/stacks-ui": "^1.2.1",
+        "axios": "^0.25.0",
+        "classnames": "^2.3.1",
+        "country-state-city": "^3.0.1",
+        "js-cookie": "^3.0.1",
+        "prop-types": "^15.7.2",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "react-query": "^3.34.12",
+        "react-scripts": "5.0.0",
+        "react-toastify": "^8.1.1",
+        "styled-components": "^5.3.3"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "sprite-generate": "svg-sprite-generate -d ./src/assets/icons -o ./public/sprite.svg",
+        "lint": "eslint --fix ."
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.12.10",
+        "@babel/core": "7.12.3",
+        "@babel/eslint-parser": "^7.17.0",
+        "@babel/plugin-transform-runtime": "^7.13.10",
+        "@babel/preset-env": "^7.13.12",
+        "@babel/preset-react": "^7.12.13",
+        "eslint-config-airbnb": "^18.2.1",
+        "eslint-config-prettier": "^7.1.0",
+        "eslint-config-react-app": "^6.0.0",
+        "eslint-plugin-flowtype": "^5.2.0",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-jest": "^24.1.0",
+        "eslint-plugin-jsx-a11y": "^6.3.1",
+        "eslint-plugin-react": "^7.21.5",
+        "eslint-plugin-react-hooks": "^4.2.0",
+        "eslint-plugin-testing-library": "^3.9.2",
+        "eslint-webpack-plugin": "^2.1.0"
+    }
 }

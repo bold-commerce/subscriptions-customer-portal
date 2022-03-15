@@ -1,12 +1,13 @@
 const formatSubscriptionNextOrderDatetime = (subscription) => {
-  if (!subscription) return null;
+    if (!subscription) return null;
 
-  const { nextOrderDatetime } = subscription;
+    const { nextOrderDatetime } = subscription;
 
-  return new Date(nextOrderDatetime).toLocaleString(
-    "en-US",
-    { day: "numeric", month: "long", year: "numeric" }
-  );
+    return new Date(nextOrderDatetime).toLocaleString("en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
 };
 
 export default formatSubscriptionNextOrderDatetime;
