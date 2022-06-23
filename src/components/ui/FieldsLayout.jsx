@@ -1,28 +1,29 @@
+import React from "react";
 import styled from "styled-components";
-import { ChildrenType } from "../../const";
+import { ChildrenType } from "../../customPropTypes";
 
 export const FieldsLayoutPropTypes = {
-  children: ChildrenType.isRequired
+    children: ChildrenType.isRequired
 };
 
 const StyledFieldsLayout = styled.div`
-  display: grid;
-  gap: 16px;
+    display: grid;
+    gap: 16px;
 
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(${({ fieldsAmount }) => fieldsAmount}, 1fr);
-  }
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(${({ fieldsAmount }) => fieldsAmount}, 1fr);
+    }
 `;
 
 const FieldsLayout = (props) => {
-  const { children } = props;
-  const fieldsAmount = Array.isArray(children) ? children.length : 1;
+    const { children } = props;
+    const fieldsAmount = Array.isArray(children) ? children.length : 1;
 
-  return (
-    <StyledFieldsLayout fieldsAmount={fieldsAmount}>
-      { children }
-    </StyledFieldsLayout>
-  );
+    return (
+        <StyledFieldsLayout fieldsAmount={fieldsAmount}>
+            { children }
+        </StyledFieldsLayout>
+    );
 };
 
 FieldsLayout.propTypes = FieldsLayoutPropTypes;

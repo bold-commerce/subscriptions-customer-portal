@@ -1,27 +1,104 @@
 {
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended"
-  ],
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
+    "env": {
+        "browser": true,
+        "es2021": true
     },
-    "ecmaVersion": 13,
-    "sourceType": "module"
-  },
-  "plugins": [
-    "react"
-  ],
-  "rules": {
-    "indent": ["error", 2],
-    "quotes": ["error", "double"],
-    "semi": ["error", "always"],
-    "react/react-in-jsx-scope": "off",
-    "react/display-name": "off"
-  }
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2020,
+        "sourceType": "module"
+    },
+    "parser": "@babel/eslint-parser",
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "react/jsx-indent": [
+            "error",
+            4
+        ],
+        "react/jsx-fragments": [
+            "off",
+            "element"
+        ],
+        "react/jsx-indent-props": [
+            "error",
+            4
+        ],
+        "react/jsx-props-no-spreading": "off",
+        "react/forbid-prop-types": [
+            "off"
+        ],
+        "max-len": [
+            "warn",
+            {
+                "code": 160,
+                "tabWidth": 4,
+                "ignoreUrls": true,
+                "ignoreStrings": true,
+                "ignoreTemplateLiterals": true
+            }
+        ],
+        "react/jsx-filename-extension": [
+            "warn",
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx"
+                ]
+            }
+        ],
+        "react/destructuring-assignment": [
+            "off"
+        ],
+        "function-paren-newline": [
+            "error",
+            "consistent"
+        ],
+        "react/sort-comp": [
+            "warn",
+            {
+                "order": [
+                    "lifecycle",
+                    "render",
+                    "/^render.+$/",
+                    "everything-else",
+                    "static-methods"
+                ]
+            }
+        ],
+        "no-param-reassign": [
+            "off"
+        ],
+        "no-multiple-empty-lines": [
+            "error",
+            {
+                "max": 1
+            }
+        ],
+        "import/prefer-default-export": [
+            "off"
+        ],
+        "object-curly-newline": [
+            "error",
+            {
+                "ImportDeclaration": {
+                    "multiline": true
+                }
+            }
+        ]
+    }
 }

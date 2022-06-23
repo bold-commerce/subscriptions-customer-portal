@@ -1,8 +1,9 @@
+import React from "react";
 import styled from "styled-components";
-import { ChildrenType } from "../../const";
+import { ChildrenType } from "../../customPropTypes";
 
 export const FormLayoutPropTypes = {
-  children: ChildrenType.isRequired
+    children: ChildrenType.isRequired
 };
 
 const StyledFormLayout = styled.div`
@@ -15,13 +16,13 @@ const StyledFormLayout = styled.div`
 `;
 
 const FormLayout = (props) => {
-  const { children } = props;
+    const { children } = props;
 
-  return (
-    <StyledFormLayout>
-      { children }
-    </StyledFormLayout>
-  );
+    return (
+        <StyledFormLayout>
+            { children }
+        </StyledFormLayout>
+    );
 };
 
 FormLayout.propTypes = FormLayoutPropTypes;

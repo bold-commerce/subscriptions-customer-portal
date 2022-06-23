@@ -1,6 +1,6 @@
 const formatCityOption = (city) => {
-  const { name } = city;
-  return { name, value: name };
+    const { name } = city;
+    return { name, value: name };
 };
 
 export default formatCityOption;
